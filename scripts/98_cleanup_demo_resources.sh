@@ -14,13 +14,18 @@ kubectl delete deployment,svc,serviceaccount,configmap,secret,role,rolebinding -
 kubectl delete deployment,svc,serviceaccount,configmap,secret,role,rolebinding -l app=reviews -n default --ignore-not-found
 kubectl delete deployment,svc,serviceaccount,configmap,secret,role,rolebinding -l app=ratings -n default --ignore-not-found
 
+info "Deleting curl test pod and service..."
+kubectl delete deployment curl -n default --ignore-not-found
+kubectl delete svc curl -n default --ignore-not-found
+kubectl delete serviceaccount curl -n default --ignore-not-found
+
 info "Deleting Gateway and HTTPRoute resources..."
 kubectl delete gateway bookinfo-gateway -n default --ignore-not-found
 kubectl delete httproute bookinfo -n default --ignore-not-found
 
 info "Deleting Istio security policies..."
 kubectl delete peerauthentication default -n default --ignore-not-found
-kubectl delete authorizationpolicy allow-internal -n default --ignore-not-found
+kubectl delete authorizationpolicy --all -n default --ignore-not-found
 
 info "Deleting Kiali and Prometheus addons..."
 kubectl delete -f https://raw.githubusercontent.com/istio/istio/release-1.26/samples/addons/kiali.yaml --ignore-not-found

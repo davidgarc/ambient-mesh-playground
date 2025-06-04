@@ -41,6 +41,8 @@ This project provides a hands-on environment for testing and demonstrating Istio
 - `scripts/07_apply_istio_features.sh` – Enable traffic management, security, and observability for Bookinfo
 - `scripts/08_enable_mtls.sh` – Enable STRICT mutual TLS (mTLS) in the `default` namespace
 - `scripts/09_apply_authorization_policies.sh` – Apply and validate Istio Authorization Policies (L4 & L7)
+- `scripts/98_cleanup_demo_resources.sh` – Clean up all Bookinfo, mesh, and demo resources
+- `scripts/99_destroy_aks_cluster.sh` – Destroy the AKS cluster and all Azure resources
 - `scripts/PRD.txt` – Product Requirements Document and project plan
 
 ## Usage
@@ -150,14 +152,28 @@ After running the script, you can observe the generated traffic and policy effec
 
 ## Project Status
 
-- [x] Provision AKS cluster
-- [x] Install Gateway API CRDs
-- [x] Install Istio Ambient Mesh
-- [x] Verify Istio installation
-- [x] Deploy Bookinfo sample application (local and external access)
-- [x] Onboard namespace to ambient mesh (label namespace)
-- [x] Enable traffic management, security, and observability features
-- [x] Destroy/teardown environment
+- **Completed:**
+  - Provision AKS cluster
+  - Install Gateway API CRDs
+  - Install Istio Ambient Mesh
+  - Verify Istio installation
+  - Deploy Bookinfo sample application (local and external access)
+  - Onboard namespace to ambient mesh (label namespace)
+  - Enable traffic management, security, and observability features
+  - Destroy/teardown environment
+
+- **In Progress:**
+  - Configure Ingress Gateway (external access via LoadBalancer, Gateway API)
+  - Implement Authorization Policies (L4 & L7, iterative testing and validation)
+
+- **Not Started:**
+  - Implement Traffic Management (routing, shifting, fault injection, retries, timeouts)
+  - Implement JWT-based Authentication
+  - Install Prometheus for Metrics Collection
+  - Install Grafana for Metrics Visualization
+  - Install Jaeger for Distributed Tracing
+  - Explore WebAssembly (Wasm) Plugin Support
+  - Create Documentation and Demonstration Scripts
 
 ## Next Step
 - **Onboard the default namespace to the ambient mesh:**
@@ -176,15 +192,16 @@ After running the script, you can observe the generated traffic and policy effec
 To remove all resources created by this demo, follow these steps:
 
 ### 1. Clean Up Demo Resources in the Cluster
-This script removes the Bookinfo application, Gateway/HTTPRoute, Istio security policies, Kiali, Prometheus, and any generated YAML files. It leaves the AKS cluster and Istio control plane intact.
+This script removes the Bookinfo application, Gateway/HTTPRoute, Istio security policies, Kiali, Prometheus, the curl test pod, and any generated YAML files. It leaves the AKS cluster and Istio control plane intact.
 
 ```sh
-./scripts/09_cleanup_demo_resources.sh
+./scripts/98_cleanup_demo_resources.sh
 ```
 - **What it does:**
-  - Deletes Bookinfo deployments, services, and related resources in the `default` namespace.
-  - Removes Gateway and HTTPRoute resources.
-  - Deletes PeerAuthentication and AuthorizationPolicy resources.
+  - Deletes Bookinfo deployments, services (including the LoadBalancer gateway), and related resources in the `default` namespace.
+  - Removes the curl test pod, service, and service account.
+  - Removes all Bookinfo Gateway and HTTPRoute resources in the `default` namespace.
+  - Deletes PeerAuthentication and all AuthorizationPolicy resources in the `default` namespace.
   - Removes Kiali and Prometheus addons.
   - Deletes generated YAML files (gateway.yaml, httproute.yaml, peerauth.yaml, authorizationpolicy.yaml).
 - **What remains:**
@@ -201,7 +218,7 @@ kubectl delete -f https://github.com/kubernetes-sigs/gateway-api/releases/downlo
 This script deletes the entire AKS cluster and its resource group, including all associated Azure resources. **This action is irreversible.**
 
 ```sh
-./scripts/10_destroy_aks_cluster.sh
+./scripts/99_destroy_aks_cluster.sh
 ```
 - **What it does:**
   - Deletes the AKS cluster.
