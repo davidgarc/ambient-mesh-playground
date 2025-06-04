@@ -1,0 +1,43 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+
+# Dependency directories
+node_modules/
+
+# Environment variables and secrets
+.env
+.env.*
+
+# Taskmaster, Cursor, and Roo internal tool/rule directories
+.taskmaster/
+.cursor/
+.roo/
+
+# Istio binaries and extracted folders
+istio-*/
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS specific
+.DS_Store
+
+# Task files
+tasks.json
+tasks/
+
+# Backup and temp files
+*~
+*.bak
+*.tmp 

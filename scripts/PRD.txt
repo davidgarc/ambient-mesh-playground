@@ -1,0 +1,94 @@
+# Overview  
+This project aims to evaluate and demonstrate the features and capabilities of Istio Ambient Mesh by deploying it on Azure AKS clusters. The project will use a sample microservices application (similar to Istio's Bookinfo app) to showcase traffic management, security, observability, and extensibility in ambient mode. The goal is to provide a hands-on, reproducible environment for learning, experimentation, and validation of Istio Ambient Mesh in a cloud-native context.
+
+# Core Features  
+- **Ambient Mesh Installation on AKS**  
+  - Deploy Istio Ambient Mesh using the official Istio CLI and Helm on Azure AKS.
+  - Validate installation and ensure all core components (Istiod, CNI, Ztunnel) are running.
+- **Sample Application Deployment**  
+  - Deploy the Bookinfo sample application (or equivalent) to the AKS cluster.
+  - Ensure the app is reachable and functional before and after mesh onboarding.
+- **Traffic Management**  
+  - Demonstrate routing, traffic shifting, and fault injection using Gateway API and Istio resources.
+- **Security**  
+  - Enable and verify mutual TLS (mTLS) between services.
+  - Apply authorization policies and JWT-based authentication.
+- **Observability**  
+  - Integrate with Prometheus, Grafana, and Jaeger for metrics and tracing.
+  - Visualize mesh traffic and service dependencies.
+- **Extensibility**  
+  - Explore WebAssembly (Wasm) plugin support via waypoint proxies.
+
+# User Experience  
+- **User Personas**  
+  - Platform engineers evaluating service mesh options.
+  - DevOps engineers deploying and managing microservices on AKS.
+  - Developers learning about Istio Ambient Mesh features.
+- **Key User Flows**  
+  - Cluster setup and Istio Ambient Mesh installation.
+  - Deploying and onboarding applications to the mesh.
+  - Applying and testing mesh features (traffic, security, observability).
+- **UI/UX Considerations**  
+  - Use of Kubernetes manifests, Helm charts, and Istioctl for all operations.
+  - Dashboards for observability (Grafana, Jaeger).
+
+<PRD>
+# Technical Architecture  
+- **System Components**  
+  - Azure AKS cluster (Kubernetes 1.29+)
+  - Istio Ambient Mesh (installed via istioctl/Helm, ambient profile)
+  - Sample application (Bookinfo or similar)
+  - Kubernetes Gateway API CRDs
+  - Observability stack: Prometheus, Grafana, Jaeger
+- **Data Models**  
+  - Standard Kubernetes resources (Deployments, Services, CRDs)
+  - Istio resources (Gateway, VirtualService, AuthorizationPolicy, PeerAuthentication)
+- **APIs and Integrations**  
+  - Kubernetes API
+  - Istioctl CLI
+  - Azure CLI for AKS provisioning
+  - Gateway API
+- **Infrastructure Requirements**  
+  - Azure subscription with permissions to create AKS clusters
+  - Sufficient node resources for Istio and sample app
+  - Public IP for ingress access
+
+# Development Roadmap  
+- **MVP Requirements**  
+  - Provision AKS cluster (manual or automated)
+  - Install Istio Ambient Mesh (ambient profile)
+  - Install Gateway API CRDs
+  - Deploy sample application
+  - Onboard app to mesh and validate connectivity
+  - Demonstrate basic traffic management (routing, shifting)
+  - Enable mTLS and basic authorization policy
+  - Integrate Prometheus, Grafana, Jaeger
+- **Future Enhancements**  
+  - Automate cluster and mesh setup with scripts
+  - Add more advanced traffic and security scenarios
+  - Explore multi-cluster or multi-namespace mesh
+  - Add CI/CD integration for app and mesh config
+
+# Logical Dependency Chain
+- Provision AKS cluster → Install Istio Ambient Mesh → Install Gateway API CRDs → Deploy sample app → Onboard app to mesh → Apply traffic management → Enable security features → Integrate observability → Extend with plugins
+- Prioritize getting a working sample app visible via ingress, then incrementally apply mesh features
+- Each feature should be atomic and independently testable
+
+# Risks and Mitigations  
+- **Technical challenges:** Azure AKS version compatibility, Istio ambient mode maturity, Gateway API support
+  - *Mitigation:* Use supported versions, follow official docs, test incrementally
+- **MVP scoping:** Overengineering or feature creep
+  - *Mitigation:* Focus on core mesh install, sample app, and basic features first
+- **Resource constraints:** Azure quota, cluster sizing
+  - *Mitigation:* Use minimal node pools, monitor resource usage
+
+# Appendix  
+- **Research findings:**
+  - Istio Ambient Mesh docs: https://istio.io/latest/docs/ambient/getting-started/
+  - Azure AKS docs: https://learn.microsoft.com/en-us/azure/aks/
+  - Gateway API: https://gateway-api.sigs.k8s.io/
+- **Technical specifications:**
+  - Istio 1.26.1+
+  - Kubernetes 1.29+
+  - Azure CLI, kubectl, istioctl
+</PRD> 
