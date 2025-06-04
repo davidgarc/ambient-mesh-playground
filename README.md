@@ -10,68 +10,61 @@ This project provides a hands-on environment for testing and demonstrating Istio
 - Azure subscription with permissions to create and delete AKS clusters and resource groups
 
 ## Project Structure
-- `scripts/provision_aks_cluster.sh` – Provision and verify an AKS cluster
-- `scripts/destroy_aks_cluster.sh` – Destroy the AKS cluster and resource group
-- `scripts/install_gateway_api_crds.sh` – Install Gateway API CRDs
-- `scripts/install_istio_ambient.sh` – Install Istio Ambient Mesh
-- `scripts/verify_istio_installation.sh` – Verify Istio installation health
-- `scripts/deploy_bookinfo_demo.sh` – Deploy the Bookinfo sample application (with optional external access)
-- `scripts/verify_ambient_onboarding.sh` – Verify namespace onboarding to ambient mesh
-- `scripts/apply_istio_features.sh` – Enable traffic management, security, and observability for Bookinfo
+- `scripts/01_provision_aks_cluster.sh` – Provision and verify an AKS cluster
+- `scripts/02_install_gateway_api_crds.sh` – Install Gateway API CRDs
+- `scripts/03_install_istio_ambient.sh` – Install Istio Ambient Mesh
+- `scripts/04_verify_istio_installation.sh` – Verify Istio installation health
+- `scripts/05_deploy_bookinfo_demo.sh` – Deploy the Bookinfo sample application (with optional external access)
+- `scripts/06_verify_ambient_onboarding.sh` – Verify namespace onboarding to ambient mesh
+- `scripts/07_apply_istio_features.sh` – Enable traffic management, security, and observability for Bookinfo
 - `scripts/PRD.txt` – Product Requirements Document and project plan
 
 ## Usage
 
 ### 1. Provision the AKS Cluster
-```bash
-bash scripts/provision_aks_cluster.sh
+```sh
+./scripts/01_provision_aks_cluster.sh
 ```
 - This script will create the resource group and AKS cluster (if they do not exist), retrieve credentials, and verify the cluster is ready.
 
 ### 2. Install Gateway API CRDs
-```bash
-bash scripts/install_gateway_api_crds.sh
+```sh
+./scripts/02_install_gateway_api_crds.sh
 ```
 - Installs the required Gateway API CRDs for Istio Ambient Mesh.
 
 ### 3. Install Istio Ambient Mesh
-```bash
-bash scripts/install_istio_ambient.sh
+```sh
+./scripts/03_install_istio_ambient.sh
 ```
 - Installs Istio with the ambient profile using istioctl.
 
 ### 4. Verify Istio Installation
-```bash
-bash scripts/verify_istio_installation.sh
+```sh
+./scripts/04_verify_istio_installation.sh
 ```
 - Checks that all Istio pods are running and the ztunnel DaemonSet is healthy.
 
 ### 5. Deploy the Bookinfo Sample Application
-#### Local access (default):
-```bash
-bash scripts/deploy_bookinfo_demo.sh
+```sh
+./scripts/05_deploy_bookinfo_demo.sh
 ```
-- Use port-forward to access the app:
-  ```bash
+- This script deploys the Bookinfo sample application in the `default` namespace.
+- Use port-forward to access the app locally:
+  ```sh
   kubectl port-forward svc/productpage 9080:9080
   # Then open http://localhost:9080/productpage in your browser
   ```
 
-#### External access (LoadBalancer):
-```bash
-bash scripts/deploy_bookinfo_demo.sh --external
-```
-- The script will print the external URL (e.g., http://<external-ip>:9080/productpage) for browser access.
-
 ### 6. Onboard Namespace to Ambient Mesh
-```bash
+```sh
 kubectl label namespace default istio.io/dataplane-mode=ambient --overwrite
-bash scripts/verify_ambient_onboarding.sh
+./scripts/06_verify_ambient_onboarding.sh
 ```
 
 ### 7. Enable Istio Features: Traffic Management, Security, Observability
-```bash
-bash scripts/apply_istio_features.sh
+```sh
+./scripts/07_apply_istio_features.sh
 ```
 - **Traffic Management:** Sets up Gateway and HTTPRoute for Bookinfo
 - **Security:** Enables mTLS and applies an internal-only AuthorizationPolicy
@@ -116,8 +109,8 @@ To see live service graphs and metrics in Kiali, you need to generate traffic to
 ### 8. Enable Mutual TLS (mTLS)
 To enforce secure service-to-service communication in the mesh, enable STRICT mutual TLS (mTLS) in the `default` namespace:
 
-```bash
-bash scripts/enable_mtls.sh
+```sh
+./scripts/08_enable_mtls.sh
 ```
 - This script applies a PeerAuthentication policy in the `default` namespace to require mTLS for all workloads.
 - The script is idempotent and verifies that the policy is applied.
@@ -157,15 +150,15 @@ This demo uses the `default` namespace for Bookinfo and mesh resources for simpl
 
 #### Verify Ambient Mesh Onboarding
 To verify that pods are onboarded to the ambient mesh:
-```bash
-bash scripts/verify_ambient_onboarding.sh
+```sh
+./scripts/06_verify_ambient_onboarding.sh
 ```
 - All pods should show as healthy and onboarded.
 
 #### Verify Istio Installation
 To check that Istio is installed and healthy:
-```bash
-bash scripts/verify_istio_installation.sh
+```sh
+./scripts/04_verify_istio_installation.sh
 ```
 - All Istio pods and the ztunnel DaemonSet should be running.
 
@@ -207,8 +200,8 @@ To remove all resources created by this demo, follow these steps:
 ### 1. Clean Up Demo Resources in the Cluster
 This script removes the Bookinfo application, Gateway/HTTPRoute, Istio security policies, Kiali, Prometheus, and any generated YAML files. It leaves the AKS cluster and Istio control plane intact.
 
-```bash
-bash scripts/cleanup_demo_resources.sh
+```sh
+./scripts/09_cleanup_demo_resources.sh
 ```
 - **What it does:**
   - Deletes Bookinfo deployments, services, and related resources in the `default` namespace.
@@ -229,8 +222,8 @@ kubectl delete -f https://github.com/kubernetes-sigs/gateway-api/releases/downlo
 ### 2. Destroy Azure AKS Cluster and Cloud Resources
 This script deletes the entire AKS cluster and its resource group, including all associated Azure resources. **This action is irreversible.**
 
-```bash
-bash scripts/destroy_aks_cluster.sh
+```sh
+./scripts/10_destroy_aks_cluster.sh
 ```
 - **What it does:**
   - Deletes the AKS cluster.
